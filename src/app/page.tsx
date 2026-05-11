@@ -1,37 +1,42 @@
 import Image from "next/image";
-import { list } from "@vercel/blob";
+import { getLatestImage } from "@/actions/admin";
 import styles from "./page.module.css";
+import PdfViewerClient from "@/components/PdfViewerClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  // 1. Fetch the latest blob and find the original high-quality image
-  const { blobs } = await list();
-  const latestImage = blobs.find(b => b.pathname.startsWith("original-")) || blobs[0];
+  const latestUrl = await getLatestImage();
 
-  if (!latestImage) {
+  if (!latestUrl) {
     return (
       <main className={styles.main}>
         <div className={styles.empty}>
-          <p>No Image Available To Display</p>
+          <p>No Content Available To Display</p>
           <a href="/login" className={styles.loginLink}>Admin Login</a>
         </div>
       </main>
     );
   }
 
+  const isPdf = latestUrl.toLowerCase().endsWith(".pdf");
+
   return (
     <main className={styles.main}>
-      <div className={styles.imageContainer}>
-        <Image
-          src={latestImage.url}
-          alt="Showcase Image"
-          fill
-          priority
-          sizes="100vw"
-          className={styles.image}
-        />
-      </div>
+      {isPdf ? (
+        <PdfViewerClient url={latestUrl} />
+      ) : (
+        <div className={styles.imageContainer}>
+          <Image
+            src={latestUrl}
+            alt="Showcase Image"
+            fill
+            priority
+            sizes="100vw"
+            className={styles.image}
+          />
+        </div>
+      )}
     </main>
   );
 }
