@@ -1,10 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --background: #050505;
-  --foreground: #ffffff;
-  --accent: #ff8c00;
-  --accent-secondary: #ff0080;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #141414;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1a1;
+  --text-muted: #666666;
+  --accent: #ffffff; /* Modern minimal uses white as accent on black */
+  --border: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.2);
 }
 
 * {
@@ -17,15 +22,15 @@ html,
 body {
   height: 100%;
   width: 100%;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 body {
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 a {
@@ -33,20 +38,20 @@ a {
   text-decoration: none;
 }
 
+button {
+  font-family: inherit;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #111;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
 }

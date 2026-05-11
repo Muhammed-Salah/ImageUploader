@@ -1,14 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  async redirects() {
-    return [
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '5mb',
+    },
+  },
+  images: {
+    remotePatterns: [
       {
-        source: "/",
-        destination: "/display",
-        permanent: true,
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+        port: '',
+        pathname: '/**',
       },
-    ];
+    ],
   },
 };
 

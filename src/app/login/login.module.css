@@ -1,0 +1,101 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: var(--bg-primary);
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  padding: 40px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.inputGroup input {
+  padding: 12px;
+  font-size: 14px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.inputGroup input:focus {
+  border-color: var(--text-secondary);
+}
+
+.button {
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  font-size: 13px;
+  color: #ff4d4d;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 30px 20px;
+    border: none;
+    background: transparent;
+  }
+}
