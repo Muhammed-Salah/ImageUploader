@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 
 export default function DisplayPage() {
   // The filename is mentioned here as requested
-  const imageName = "VijayaTheeram.png";
+  const imageName = "public/1001248290.png";
 
   return (
     <main className={styles.main}>
