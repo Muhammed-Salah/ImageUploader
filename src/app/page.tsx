@@ -5,15 +5,15 @@ import styles from "./page.module.css";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  // 1. Fetch the latest blob
+  // 1. Fetch the latest blob and find the original high-quality image
   const { blobs } = await list();
-  const latestImage = blobs[0]; // Since we delete old ones, there should be only one
+  const latestImage = blobs.find(b => b.pathname.startsWith("original-")) || blobs[0];
 
   if (!latestImage) {
     return (
       <main className={styles.main}>
         <div className={styles.empty}>
-          <p>No image uploaded yet.</p>
+          <p>No Image Available To Display</p>
           <a href="/login" className={styles.loginLink}>Admin Login</a>
         </div>
       </main>
@@ -28,6 +28,7 @@ export default async function Home() {
           alt="Showcase Image"
           fill
           priority
+          sizes="100vw"
           className={styles.image}
         />
       </div>

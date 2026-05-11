@@ -4,10 +4,19 @@ import { put, del, list } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { verifyPassword, ADMIN_USERNAME } from "@/lib/auth";
+import sharp from "sharp";
 
 export async function getLatestImage() {
   const { blobs } = await list();
-  return blobs[0]?.url || null;
+  // Return the original image (prefixed with original-)
+  const original = blobs.find(b => b.pathname.startsWith("original-"));
+  return original?.url || blobs[0]?.url || null;
+}
+
+export async function getLatestThumbnail() {
+  const { blobs } = await list();
+  const thumb = blobs.find(b => b.pathname.startsWith("thumb-"));
+  return thumb?.url || null;
 }
 
 export async function login(formData: FormData) {
@@ -42,18 +51,40 @@ export async function uploadImage(formData: FormData) {
   const file = formData.get("image") as File;
   if (!file) throw new Error("No file uploaded");
 
-  // 1. List existing blobs to delete old ones
+  // 1. Prepare buffers
+  const buffer = Buffer.from(await file.arrayBuffer());
+  
+  // 2. Generate Thumbnail (Max 1200x630, maintaining aspect ratio without padding)
+  const thumbnailBuffer = await sharp(buffer)
+    .resize(1200, 630, {
+      fit: 'inside',
+      withoutEnlargement: true
+    })
+    .jpeg({ quality: 80 })
+    .toBuffer();
+
+  // 3. Delete existing blobs in parallel
   const { blobs } = await list();
-  for (const blob of blobs) {
-    await del(blob.url);
+  if (blobs.length > 0) {
+    await Promise.all(blobs.map(blob => del(blob.url)));
   }
 
-  // 2. Upload new image
-  const filename = `upload-${Date.now()}.${file.name.split(".").pop()}`;
-  const blob = await put(filename, file, {
-    access: "public",
-  });
+  // 4. Upload new image and thumbnail in parallel
+  const timestamp = Date.now();
+  const ext = file.name.split(".").pop() || "jpg";
+  
+  const originalName = `original-${timestamp}.${ext}`;
+  const thumbName = `thumb-${timestamp}.jpg`;
+
+  // Start both uploads simultaneously
+  const [originalBlob] = await Promise.all([
+    put(originalName, file, { access: "public" }),
+    put(thumbName, thumbnailBuffer, {
+      access: "public",
+      contentType: "image/jpeg",
+    })
+  ]);
 
   revalidatePath("/");
-  return { success: true, url: blob.url };
+  return { success: true, url: originalBlob.url };
 }

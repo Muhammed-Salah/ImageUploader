@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { uploadImage, logout, getLatestImage } from "@/actions/admin";
+import { uploadImage, logout, getLatestThumbnail } from "@/actions/admin";
 import styles from "./admin.module.css";
 
 export default function AdminPage() {
@@ -11,7 +11,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getLatestImage().then(setCurrentImage);
+    getLatestThumbnail().then(setCurrentImage);
   }, []);
 
   async function handleLogout() {
@@ -23,7 +23,7 @@ export default function AdminPage() {
     e.preventDefault();
     const form = e.currentTarget;
     setLoading(true);
-    setStatus("Uploading...");
+    setStatus(""); // Clear status during upload to avoid double buttons
 
     const formData = new FormData(form);
     try {
@@ -48,12 +48,14 @@ export default function AdminPage() {
 
         {currentImage && (
           <div className={styles.previewSection}>
-            <p className={styles.previewLabel}>Current Image</p>
+            <p className={styles.previewLabel}>Current Share Thumbnail (1200x630)</p>
             <div className={styles.previewWrapper}>
               <Image 
                 src={currentImage} 
                 alt="Current display" 
                 fill 
+                priority
+                sizes="(max-width: 768px) 100vw, 400px"
                 className={styles.previewImage}
               />
             </div>
@@ -68,7 +70,7 @@ export default function AdminPage() {
           </div>
           
           <button type="submit" disabled={loading} className={styles.button}>
-            {loading ? "Processing..." : "Replace Image"}
+            {loading ? "Updating..." : "Update Image"}
           </button>
         </form>
         

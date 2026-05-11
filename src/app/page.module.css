@@ -21,13 +21,31 @@
 }
 
 .empty {
-  text-align: center;
-  color: #444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.empty p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .loginLink {
-  display: inline-block;
-  margin-top: 1rem;
-  color: #ff8c00;
-  text-decoration: underline;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  border-radius: 4px;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.loginLink:hover {
+  opacity: 0.8;
 }

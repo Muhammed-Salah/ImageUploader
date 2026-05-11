@@ -3,12 +3,16 @@ import { list } from "@vercel/blob";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
-  // Fetch the latest blob to use as the share image
+  // Fetch the latest blobs and find the thumbnail
   const { blobs } = await list();
-  const latestImage = blobs[0];
-  const shareImage = latestImage?.url || "/og-image.png";
+  const thumbnail = blobs.find(b => b.pathname.startsWith("thumb-"));
+  const original = blobs.find(b => b.pathname.startsWith("original-"));
+  
+  // Use thumbnail for sharing, fallback to original or default
+  const shareImage = thumbnail?.url || original?.url || "/og-image.png";
 
   return {
+    metadataBase: new URL(process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
     title: "Image Showcase | Premium Display",
     description: "A minimal, high-performance image management and showcase application.",
     keywords: ["image", "uploader", "showcase", "minimal", "nextjs"],
